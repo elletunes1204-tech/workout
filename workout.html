@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>My Workout</title>
+<meta name="apple-mobile-web-app-title" content="Workout">
+<meta name="theme-color" content="#fbf8f2">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 180 180%27%3E%3Crect width=%27180%27 height=%27180%27 fill=%27%23fbf8f2%27/%3E%3Ccircle cx=%2790%27 cy=%2790%27 r=%2756%27 fill=%27none%27 stroke=%27%236b4a6e%27 stroke-width=%2714%27/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fbf8f2; --paper:#ffffff; --ink:#2b2724; --soft:#6f6760; --line:#e8e1d6;
+  --accent:#6b4a6e; --accent-soft:#f1e9f1; --done:#5f7d62; --done-soft:#e9f0e8;
+  --warm:#a8743a; --cool:#4d7286;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink)}
+body{font-family:"Cormorant Garamond",Georgia,serif;font-size:19px;line-height:1.45;padding-bottom:calc(40px + env(safe-area-inset-bottom,0px))}
+h1,h2,h3{font-family:"Playfair Display",Georgia,serif;font-weight:600;margin:0}
+main{max-width:560px;margin:0 auto;padding:20px 18px}
+header h1{font-size:30px;letter-spacing:-.01em}
+.sub{color:var(--soft);font-size:17px;margin-top:2px}
+
+.days{display:flex;gap:8px;overflow-x:auto;margin:18px -18px 6px;padding:0 18px 4px}
+.days button{flex:0 0 auto;border:1px solid var(--line);background:var(--paper);color:var(--ink);
+  font:600 15px "Playfair Display",Georgia,serif;padding:9px 14px;border-radius:999px;cursor:pointer}
+.days button small{display:block;font:500 14px "Cormorant Garamond",Georgia,serif;color:var(--soft)}
+.days button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.days button[aria-pressed="true"] small{color:#eadcea}
+
+.progress{display:flex;align-items:center;gap:14px;margin:16px 0 4px}
+.ring{width:58px;height:58px;flex:0 0 auto}
+.ring circle{fill:none;stroke-width:6}
+.ring .track{stroke:var(--line)}
+.ring .bar{stroke:var(--done);stroke-linecap:round;transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset .35s}
+.progress strong{font-family:"Playfair Display",Georgia,serif;font-size:22px}
+.progress span{color:var(--soft);display:block;font-size:16px}
+
+section.block{margin-top:26px}
+.block h2{font-size:21px;display:flex;align-items:baseline;gap:10px}
+.block h2 .n{color:var(--accent);font-size:17px}
+.block .note{color:var(--soft);font-size:16px;margin:2px 0 10px}
+.block.warm h2 .n,.block.cardio h2 .n{color:var(--warm)} .block.cool h2 .n{color:var(--cool)}
+
+.ex{background:var(--paper);border:1px solid var(--line);border-radius:14px;margin-bottom:10px;overflow:hidden}
+.ex.is-done{background:var(--done-soft);border-color:#cfdccd}
+.row{display:flex;gap:12px;align-items:flex-start;padding:13px 14px}
+.check{appearance:none;flex:0 0 auto;width:26px;height:26px;border:1.5px solid #bfb5a8;border-radius:50%;margin:2px 0 0;cursor:pointer;display:grid;place-items:center;background:#fff}
+.check:checked{background:var(--done);border-color:var(--done)}
+.check:checked::after{content:"";width:7px;height:12px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.check:focus-visible,.days button:focus-visible,.more:focus-visible,.reset:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.info{flex:1;min-width:0}
+.info h3{font-size:17px;line-height:1.3}
+.ex.is-done h3{text-decoration:line-through;text-decoration-color:#9bb09d}
+.meta{display:flex;flex-wrap:wrap;gap:4px 12px;color:var(--soft);font-size:16px;margin-top:2px}
+.meta .wt{color:var(--accent);font-weight:600}
+.pos{font-size:15px;color:var(--soft);font-style:italic;margin-top:2px}
+.timer{display:inline-block;margin:8px 10px 0 0;background:var(--accent-soft);border:0;color:var(--accent);font:600 15px "Cormorant Garamond",Georgia,serif;padding:6px 12px;border-radius:999px;cursor:pointer;font-variant-numeric:tabular-nums}
+.timer.running{background:var(--accent);color:#fff}
+.timer:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.block.flex h2 .n{color:var(--done)}
+.more{background:none;border:0;color:var(--accent);font:600 15px "Cormorant Garamond",Georgia,serif;padding:4px 0 0;cursor:pointer}
+.detail{padding:0 14px 14px 52px;font-size:17px}
+.detail p{margin:0 0 10px}
+.wlog{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:6px}
+.wlog label{min-width:96px}
+.wlog label{font-size:16px;color:var(--soft)}
+.wlog input{width:84px;font:600 17px "Cormorant Garamond",Georgia,serif;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
+.wlog .last{font-size:15px;color:var(--soft)}
+
+.empty{background:var(--paper);border:1px dashed #cfc5b7;border-radius:14px;padding:22px;text-align:center;color:var(--soft);margin-top:20px}
+.empty h2{color:var(--ink);font-size:20px;margin-bottom:6px}
+
+.reset{display:block;margin:26px auto 6px;background:none;border:1px solid var(--line);color:var(--soft);font:600 16px "Cormorant Garamond",Georgia,serif;padding:9px 18px;border-radius:999px;cursor:pointer}
+.tip{color:var(--soft);font-size:15px;text-align:center;margin:8px 0 0}
+
+  display:flex;justify-content:space-around;padding:8px 6px calc(8px + env(safe-area-inset-bottom,0px));backdrop-filter:blur(8px)}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 16px;border-radius:999px;font-size:16px;opacity:0;transition:opacity .25s;pointer-events:none}
+.toast.show{opacity:1}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main id="app">
+  <header>
+    <h1>My workout</h1>
+    <div class="sub">Beginner starting weights. Go lighter or bodyweight if needed.</div>
+  </header>
+  <div class="days" id="days" role="group" aria-label="Choose a day"></div>
+  <div id="day"></div>
+</main>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const PLAN = {
+  mon:{label:"Monday", focus:"Glutes & Quads", blocks:null},
+  tue:{label:"Tuesday", focus:"Back, Arms & Abs", blocks:[
+    {kind:"warm", title:"Warm-up", note:"Dynamic movements · 4–5 minutes", items:[
+      {id:"armcircles", name:"Arm Circles", dose:"30 sec each way", pos:"Standing"},
+      {id:"shoulderrolls", name:"Shoulder Rolls", dose:"10 reps", pos:"Standing"},
+      {id:"armswings", name:"Arm Swings", dose:"30 sec", pos:"Standing"},
+      {id:"march", name:"March in Place", dose:"60 sec", pos:"Standing"}
+    ]},
+    {kind:"strength", title:"Strength training", note:"Rest 60–90 seconds between sets. Move with control.", items:[
+      {id:"row", name:"One-Arm Dumbbell Row", dose:"2 × 10–12 each arm", wt:"5–10 lb", pos:"Standing, hand on a sturdy bench", log:true,
+       how:"Place one hand on a sturdy bench or counter. Keep both feet on the floor, hinge at your hips and pull the dumbbell toward your hip. Lower slowly."},
+      {id:"press", name:"Dumbbell Shoulder Press", dose:"2 × 8–12", wt:"3–5 lb each hand", pos:"Standing or seated", log:true,
+       how:"Start with dumbbells at shoulder height. Brace your core, press weights overhead without arching your back, then lower slowly."},
+      {id:"curl", name:"Bicep Curl", dose:"2 × 10–12", wt:"3–5 lb each hand", pos:"Standing", log:true,
+       how:"Hold weights with palms forward. Keep elbows beside your ribs, curl toward shoulders, then lower slowly."},
+      {id:"tricep", name:"Overhead Tricep Extension", dose:"2 × 10–12", wt:"3–5 lb total", pos:"Standing or seated", log:true,
+       how:"Hold one dumbbell with both hands overhead. Bend elbows to lower behind your head, then straighten arms without flaring your elbows excessively."},
+      {id:"deadbug", name:"Dead Bug", dose:"2 × 8 each side", wt:"Bodyweight", pos:"On your back on a mat",
+       how:"Lie with knees bent above hips and arms pointing upward. Slowly lower opposite arm and leg, return and switch. Keep your lower back comfortable."}
+    ]},
+    {kind:"cool", title:"Cool-down stretches", note:"Gentle holds · 3–5 minutes", items:[
+      {id:"crossbody", name:"Cross-Body Shoulder Stretch", dose:"30 sec each arm", pos:"Standing"},
+      {id:"tricepstretch", name:"Overhead Tricep Stretch", dose:"30 sec each arm", pos:"Standing"},
+      {id:"childspose", name:"Child’s Pose", dose:"45 sec", pos:"Kneeling on a mat"}
+    ]}
+  ]},
+  wed:{label:"Wednesday", focus:"Treadmill walk/jog", blocks:[
+    {kind:"cardio", title:"Light cardio", note:"Easy pace · you should be able to talk", items:[
+      {id:"walkjog", name:"Treadmill walk or light jog", dose:"15 min", wt:"Walk 2.5–3.5 mph · jog 4–5 mph · incline 0–2%", pos:"Treadmill", 
+       logs:[{k:"min",label:"Minutes",unit:"min"},{k:"mph",label:"Speed (mph)",unit:"mph"},{k:"inc",label:"Incline (%)",unit:"%"}],
+       how:"Clip on the safety key. Start walking slowly for 2–3 minutes, then raise the speed to a brisk walk. If you feel good, add short light jogs and return to walking whenever you need to. Finish with 2 minutes of slow walking. Hold the rails only for balance."}
+    ]}
+  ]},
+  thu:{label:"Thursday", focus:"Glutes & Hamstrings", blocks:null},
+  fri:{label:"Friday", focus:"Flexibility & recovery", blocks:[
+    {kind:"warm", title:"Warm-up", note:"Get warm before stretching · 2 minutes", items:[
+      {id:"fmarch", name:"March in Place", dose:"60 sec", pos:"Standing", secs:60},
+      {id:"legswings", name:"Leg Swings", dose:"10 each leg", pos:"Standing, one hand on a wall",
+       how:"Hold a wall for balance. Swing one leg forward and back in a relaxed, controlled range. Let it get a little bigger each swing, then switch legs."}
+    ]},
+    {kind:"flex", title:"Flexibility", note:"Ease in, breathe slowly, never bounce · 8–10 minutes", items:[
+      {id:"hamstring", name:"Seated Hamstring Stretch", dose:"45 sec each leg", pos:"Seated on a mat", secs:45, sides:true,
+       how:"Sit with one leg straight and the other foot against your inner thigh. Keep your back long and hinge forward from your hips toward the straight leg until you feel a gentle stretch."},
+      {id:"figure4", name:"Figure-Four Glute Stretch", dose:"45 sec each side", pos:"On your back on a mat", secs:45, sides:true,
+       how:"Lie on your back with knees bent. Cross one ankle over the opposite knee, then gently pull the bottom thigh toward your chest."},
+      {id:"hipflexor", name:"Kneeling Hip Flexor Stretch", dose:"45 sec each side", pos:"Half-kneeling, cushion under knee", secs:45, sides:true,
+       how:"Kneel on one knee with the other foot in front. Squeeze the glute of the kneeling leg and shift your hips slightly forward. Keep your torso tall."},
+      {id:"butterfly", name:"Butterfly Stretch", dose:"45 sec", pos:"Seated on a mat", secs:45,
+       how:"Sit with the soles of your feet together and knees falling out. Hold your ankles, sit tall, and let your knees relax toward the floor."},
+      {id:"catcow", name:"Cat-Cow", dose:"8 slow reps", pos:"Hands and knees on a mat",
+       how:"Inhale as you drop your belly and lift your chest. Exhale as you round your back toward the ceiling. Move slowly with your breath."},
+      {id:"fchild", name:"Child’s Pose", dose:"60 sec", pos:"Kneeling on a mat", secs:60,
+       how:"Sit your hips back toward your heels and reach your arms forward. Let your forehead rest on the mat and breathe into your back."},
+      {id:"kneeschest", name:"Knees-to-Chest", dose:"45 sec", pos:"On your back on a mat", secs:45,
+       how:"Hug both knees toward your chest and let your lower back relax into the mat. Rock gently side to side if it feels good."}
+    ]},
+    {kind:"cool", title:"Progress check", note:"Once a week · see your flexibility improve", items:[
+      {id:"reach", name:"Seated Toe Reach", dose:"1 gentle reach", pos:"Seated on a mat, legs straight",
+       logs:[{k:"in",label:"Inches (− if short)",unit:"in"}],
+       how:"Sit with legs straight and reach toward your toes without bouncing. Measure how far your fingertips go past your toes, or enter a minus number if they stop short."}
+    ]}
+  ]},
+  sat:{label:"Saturday", focus:"Upper Body & Core", blocks:null},
+  sun:{label:"Sunday", focus:"Treadmill walk/jog", blocks:[
+    {kind:"cardio", title:"Light cardio", note:"Easy pace · you should be able to talk", items:[
+      {id:"walkjog", name:"Treadmill walk or light jog", dose:"15 min", wt:"Walk 2.5–3.5 mph · jog 4–5 mph · incline 0–2%", pos:"Treadmill", 
+       logs:[{k:"min",label:"Minutes",unit:"min"},{k:"mph",label:"Speed (mph)",unit:"mph"},{k:"inc",label:"Incline (%)",unit:"%"}],
+       how:"Clip on the safety key. Start walking slowly for 2–3 minutes, then raise the speed to a brisk walk. If you feel good, add short light jogs and return to walking whenever you need to. Finish with 2 minutes of slow walking. Hold the rails only for balance."}
+    ]}
+  ]}
+};
+
+/* storage: works on GitHub Pages; falls back to memory if blocked */
+const mem = {};
+const store = {
+  get(k){ try{ const v=localStorage.getItem(k); return v===null?mem[k]??null:v }catch(e){ return mem[k]??null } },
+  set(k,v){ mem[k]=v; try{ localStorage.setItem(k,v) }catch(e){} },
+  del(k){ delete mem[k]; try{ localStorage.removeItem(k) }catch(e){} }
+};
+const todayKey = () => new Date().toISOString().slice(0,10);
+const checksKey = d => `wk:checks:${d}:${todayKey()}`;
+const weightKey = id => `wk:weight:${current}:${id}`;
+
+const dowMap = {0:"sun",1:"mon",2:"tue",3:"wed",4:"thu",5:"fri",6:"sat"};
+let current = dowMap[new Date().getDay()] || "tue";
+
+function loadChecks(d){ try{ return JSON.parse(store.get(checksKey(d))) || {} }catch(e){ return {} } }
+function saveChecks(d,c){ store.set(checksKey(d), JSON.stringify(c)) }
+
+function toast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove("show"),1600) }
+
+function renderDays(){
+  const wrap=document.getElementById("days"); wrap.innerHTML="";
+  for(const [k,d] of Object.entries(PLAN)){
+    const b=document.createElement("button");
+    b.setAttribute("aria-pressed", k===current);
+    b.innerHTML=`${d.label}<small>${d.focus}</small>`;
+    b.onclick=()=>{ current=k; renderDays(); renderDay() };
+    wrap.appendChild(b);
+  }
+}
+
+function logsOf(x){ return x.logs || (x.log?[{k:"",label:"Weight used (lb)",unit:"lb"}]:[]) }
+function esc(s){ return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])) }
+
+function renderDay(){
+  const d=PLAN[current], el=document.getElementById("day");
+  if(!d.blocks){
+    el.innerHTML=`<div class="empty"><h2>${d.label} · ${d.focus}</h2>Exercises for this day haven’t been added yet. Paste this day’s routine in chat and it’ll be built in the same way.</div>`;
+    return;
+  }
+  const checks=loadChecks(current);
+  const all=d.blocks.flatMap(b=>b.items);
+  let html=`<div class="progress">
+    <svg class="ring" viewBox="0 0 60 60" aria-hidden="true"><circle class="track" cx="30" cy="30" r="25"/><circle class="bar" id="bar" cx="30" cy="30" r="25" stroke-dasharray="157.08" stroke-dashoffset="157.08"/></svg>
+    <div><strong id="count">0/${all.length}</strong><span>completed today</span></div></div>`;
+  d.blocks.forEach((b,i)=>{
+    html+=`<section class="block ${b.kind}"><h2><span class="n">${i+1}.</span>${b.title}</h2><p class="note">${b.note}</p>`;
+    b.items.forEach(x=>{
+      const done=!!checks[x.id];
+      html+=`<div class="ex ${done?"is-done":""}" data-id="${x.id}">
+        <div class="row">
+          <input type="checkbox" class="check" aria-label="Done: ${esc(x.name)}" ${done?"checked":""}>
+          <div class="info">
+            <h3>${esc(x.name)}</h3>
+            <div class="meta"><span>${esc(x.dose)}</span>${x.wt?`<span class="wt">${esc(x.wt)}</span>`:""}</div>
+            <div class="pos">${esc(x.pos)}</div>
+            ${x.secs?`<button class="timer" data-secs="${x.secs}" data-sides="${x.sides?1:0}">Start ${x.secs}s timer</button>`:""}
+            ${x.how||logsOf(x).length?`<button class="more" aria-expanded="false">How to do it</button>`:""}
+          </div>
+        </div>
+        ${x.how||logsOf(x).length?`<div class="detail" hidden>
+          ${x.how?`<p>${esc(x.how)}</p>`:""}
+          ${logsOf(x).map(L=>{const lv=store.get(weightKey(x.id+L.k));return `<div class="wlog"><label for="w-${x.id}${L.k}">${L.label}</label>
+            <input id="w-${x.id}${L.k}" data-k="${L.k}" data-unit="${L.unit}" type="number" inputmode="decimal" min="0" step="0.1" value="${lv?esc(lv):""}" placeholder="—">
+            ${lv?`<span class="last">Last time: ${esc(lv)} ${L.unit}</span>`:""}</div>`}).join("")}
+        </div>`:""}
+      </div>`;
+    });
+    html+=`</section>`;
+  });
+  html+=`<button class="reset" id="reset">Reset today’s checkboxes</button>
+    <p class="tip">Check off each exercise once all its sets are done. Weights you enter are saved for next time.</p>`;
+  el.innerHTML=html;
+
+  el.querySelectorAll(".ex").forEach(card=>{
+    const id=card.dataset.id;
+    card.querySelector(".check").addEventListener("change",e=>{
+      const c=loadChecks(current); c[id]=e.target.checked; saveChecks(current,c);
+      card.classList.toggle("is-done",e.target.checked); updateCount();
+    });
+    const more=card.querySelector(".more");
+    if(more) more.addEventListener("click",()=>{
+      const det=card.querySelector(".detail"), open=det.hidden;
+      det.hidden=!open; more.setAttribute("aria-expanded",open); more.textContent=open?"Hide":"How to do it";
+    });
+    const tb=card.querySelector(".timer");
+    if(tb) tb.addEventListener("click",()=>runTimer(tb));
+    card.querySelectorAll(".wlog input").forEach(w=>w.addEventListener("change",()=>{
+      const key=weightKey(id+w.dataset.k);
+      if(w.value===""){ store.del(key); return }
+      store.set(key, w.value); toast(`Saved ${w.value} ${w.dataset.unit}`);
+    }));
+  });
+  document.getElementById("reset").onclick=()=>{
+    if(!confirm("Uncheck everything for today? Saved weights stay.")) return;
+    store.del(checksKey(current)); renderDay(); toast("Today reset");
+  };
+  updateCount();
+}
+
+let activeTimer=null;
+function runTimer(btn){
+  const secs=+btn.dataset.secs, label=`Start ${secs}s timer`;
+  if(activeTimer){ clearInterval(activeTimer.h); activeTimer.btn.textContent=activeTimer.label; activeTimer.btn.classList.remove("running");
+    const same=activeTimer.btn===btn; activeTimer=null; if(same) return; }
+  let left=secs; btn.classList.add("running"); btn.textContent=`${left}s · tap to stop`;
+  const h=setInterval(()=>{
+    left--; btn.textContent=`${left}s · tap to stop`;
+    if(left<=0){ clearInterval(h); activeTimer=null; btn.classList.remove("running"); btn.textContent=label;
+      try{ navigator.vibrate && navigator.vibrate([200,100,200]) }catch(e){}
+      toast(btn.dataset.sides==="1"?"Time — switch sides":"Time’s up"); }
+  },1000);
+  activeTimer={h,btn,label};
+}
+function updateCount(){
+  const d=PLAN[current]; if(!d.blocks) return;
+  const total=d.blocks.reduce((n,b)=>n+b.items.length,0);
+  const done=Object.values(loadChecks(current)).filter(Boolean).length;
+  document.getElementById("count").textContent=`${done}/${total}`;
+  document.getElementById("bar").setAttribute("stroke-dashoffset", (157.08*(1-done/total)).toFixed(2));
+}
+
+renderDays(); renderDay();
+</script>
+</body>
+</html>
