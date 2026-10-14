@@ -99,13 +99,31 @@ section.block{margin-top:26px}
 
 <script>
 const PLAN = {
-  mon:{label:"Monday", focus:"Glutes & Quads", blocks:null},
+  mon:{label:"Monday", focus:"Glutes & Quads", blocks:[
+    {kind:"warm", title:"Warm-up", note:"Dynamic movements · 4–5 minutes", items:[
+      {"id": "march", "name": "March in Place", "dose": "60 sec", "pos": "Standing", "how": "March with relaxed shoulders, gradually increasing your pace."},
+      {"id": "squatwarm", "name": "Bodyweight Squats", "dose": "10 reps", "pos": "Standing", "how": "Stand shoulder-width apart, push hips backward, bend knees and stand tall."},
+      {"id": "swings", "name": "Leg Swings", "dose": "10 each leg", "pos": "Standing, wall support", "how": "Hold a wall, gently swing one leg forward and backward, then switch."},
+      {"id": "circles", "name": "Hip Circles", "dose": "10 each direction", "pos": "Standing", "how": "Hands on hips, slowly circle hips in both directions."}
+    ]},
+    {kind:"strength", title:"Strength training", note:"Rest 60–90 seconds between sets. Move with control.", items:[
+      {"id": "goblet", "name": "Goblet Squat", "dose": "2 × 10–12", "wt": "5–10 lb total", "pos": "Standing", "how": "Hold one dumbbell at your chest. Sit hips back and down, keeping feet planted. Stand by pushing through your feet.", "log": true},
+      {"id": "bridge", "name": "Weighted Glute Bridge", "dose": "2 × 12–15", "wt": "5–15 lb total", "pos": "On your back on floor/mat; no bench", "how": "Lie with knees bent and feet flat. Hold one dumbbell securely across your hip crease. Push through heels to lift hips, squeeze glutes, then lower slowly.", "log": true},
+      {"id": "lunge", "name": "Reverse Lunge", "dose": "2 × 8 each leg", "wt": "Bodyweight → 5 lb each hand", "pos": "Standing", "how": "Step one foot backward and bend both knees. Push through front foot to return. Start without weights; add dumbbells when steady."},
+      {"id": "rdl", "name": "Dumbbell Romanian Deadlift", "dose": "2 × 10–12", "wt": "5–10 lb each hand", "pos": "Standing", "how": "Hold dumbbells near thighs, soften knees, hinge hips back with neutral spine and weights close to legs. Return upright.", "log": true}
+    ]},
+    {kind:"cool", title:"Cool-down stretches", note:"Gentle holds · 3–5 minutes", items:[
+      {"id": "quad", "name": "Standing Quad Stretch", "dose": "30 sec each leg", "pos": "Standing, wall support", "how": "Hold a wall, bend one knee and gently draw heel toward butt, keeping knees near each other."},
+      {"id": "figure", "name": "Figure-Four Glute Stretch", "dose": "30 sec each side", "pos": "On your back on floor/mat", "how": "Cross ankle over opposite thigh and gently pull supporting leg toward you."},
+      {"id": "flexor", "name": "Hip Flexor Stretch", "dose": "30 sec each side", "pos": "Half-kneeling on mat", "how": "With one knee padded on the floor and opposite foot forward, tuck pelvis slightly and shift forward."}
+    ]}
+  ]},
   tue:{label:"Tuesday", focus:"Back, Arms & Abs", blocks:[
     {kind:"warm", title:"Warm-up", note:"Dynamic movements · 4–5 minutes", items:[
-      {id:"armcircles", name:"Arm Circles", dose:"30 sec each way", pos:"Standing"},
-      {id:"shoulderrolls", name:"Shoulder Rolls", dose:"10 reps", pos:"Standing"},
-      {id:"armswings", name:"Arm Swings", dose:"30 sec", pos:"Standing"},
-      {id:"march", name:"March in Place", dose:"60 sec", pos:"Standing"}
+      {id:"armcircles", name:"Arm Circles", dose:"30 sec each way", pos:"Standing", how:"Extend arms to your sides and circle forward for 30 seconds, then backward for 30 seconds."},
+      {id:"shoulderrolls", name:"Shoulder Rolls", dose:"10 reps", pos:"Standing", how:"Roll shoulders slowly up, backward and down, keeping your neck relaxed."},
+      {id:"armswings", name:"Arm Swings", dose:"30 sec", pos:"Standing", how:"Swing arms gently across your chest, alternating which arm crosses on top."},
+      {id:"march", name:"March in Place", dose:"60 sec", pos:"Standing", how:"March in place with a comfortable pace and relaxed shoulders."}
     ]},
     {kind:"strength", title:"Strength training", note:"Rest 60–90 seconds between sets. Move with control.", items:[
       {id:"row", name:"One-Arm Dumbbell Row", dose:"2 × 10–12 each arm", wt:"5–10 lb", pos:"Standing, hand on a sturdy bench", log:true,
@@ -120,9 +138,9 @@ const PLAN = {
        how:"Lie with knees bent above hips and arms pointing upward. Slowly lower opposite arm and leg, return and switch. Keep your lower back comfortable."}
     ]},
     {kind:"cool", title:"Cool-down stretches", note:"Gentle holds · 3–5 minutes", items:[
-      {id:"crossbody", name:"Cross-Body Shoulder Stretch", dose:"30 sec each arm", pos:"Standing"},
-      {id:"tricepstretch", name:"Overhead Tricep Stretch", dose:"30 sec each arm", pos:"Standing"},
-      {id:"childspose", name:"Child’s Pose", dose:"45 sec", pos:"Kneeling on a mat"}
+      {id:"crossbody", name:"Cross-Body Shoulder Stretch", dose:"30 sec each arm", pos:"Standing", how:"Bring one arm across your chest and gently hold it with the other arm, keeping shoulders down."},
+      {id:"tricepstretch", name:"Overhead Tricep Stretch", dose:"30 sec each arm", pos:"Standing", how:"Reach one arm overhead, bend elbow and gently support it with your other hand."},
+      {id:"childspose", name:"Child’s Pose", dose:"45 sec", pos:"Kneeling on a mat", how:"Kneel on a mat, sit hips toward heels, reach arms forward and breathe slowly."}
     ]}
   ]},
   wed:{label:"Wednesday", focus:"Treadmill walk/jog", blocks:[
@@ -132,7 +150,25 @@ const PLAN = {
        how:"Clip on the safety key. Start walking slowly for 2–3 minutes, then raise the speed to a brisk walk. If you feel good, add short light jogs and return to walking whenever you need to. Finish with 2 minutes of slow walking. Hold the rails only for balance."}
     ]}
   ]},
-  thu:{label:"Thursday", focus:"Glutes & Hamstrings", blocks:null},
+  thu:{label:"Thursday", focus:"Glutes & Hamstrings", blocks:[
+    {kind:"warm", title:"Warm-up", note:"Dynamic movements · 4–5 minutes", items:[
+      {"id": "march", "name": "March in Place", "dose": "60 sec", "pos": "Standing", "how": "March gently and swing arms."},
+      {"id": "hinge", "name": "Unweighted Hip Hinges", "dose": "10 reps", "pos": "Standing", "how": "Keep knees soft, hinge hips back with neutral spine, then stand."},
+      {"id": "swings", "name": "Leg Swings", "dose": "10 each leg", "pos": "Standing, wall support", "how": "Hold wall and gently swing leg forward and backward."},
+      {"id": "bridgewarm", "name": "Bodyweight Glute Bridges", "dose": "10 reps", "pos": "On your back on floor/mat", "how": "Bend knees, plant feet, lift hips through heels, squeeze glutes, lower."}
+    ]},
+    {kind:"strength", title:"Strength training", note:"Rest 60–90 seconds between sets. Move with control.", items:[
+      {"id": "rdl", "name": "Dumbbell Romanian Deadlift", "dose": "2 × 10–12", "wt": "5–10 lb each hand", "pos": "Standing", "how": "Hold dumbbells by thighs, hinge hips backward with soft knees and neutral back, then stand tall.", "log": true},
+      {"id": "thrust", "name": "Weighted Hip Thrust", "dose": "2 × 10–12", "wt": "5–15 lb total", "pos": "Upper back against stable, non-slip bench/couch", "how": "Sit on floor with upper back supported against a stable bench or couch, feet flat. Hold dumbbell securely across hip crease, lift hips until torso and thighs align, then lower. If no stable bench, substitute floor glute bridges.", "log": true},
+      {"id": "split", "name": "Supported Split Squat", "dose": "2 × 8 each leg", "wt": "Bodyweight → 5 lb each hand", "pos": "Standing, sturdy chair support", "how": "Stand staggered, hold chair for balance, bend both knees straight down, then press up. Begin bodyweight."},
+      {"id": "abduct", "name": "Standing Hip Abduction", "dose": "2 × 12–15 each leg", "wt": "Bodyweight → resistance band", "pos": "Standing, chair support", "how": "Hold chair, raise straight leg out sideways without leaning, lower slowly. Add resistance band later."}
+    ]},
+    {kind:"cool", title:"Cool-down stretches", note:"Gentle holds · 3–5 minutes", items:[
+      {"id": "ham", "name": "Hamstring Stretch", "dose": "30 sec each leg", "pos": "Standing", "how": "Extend one heel forward, hinge at hips with long back until gentle stretch behind thigh."},
+      {"id": "figure", "name": "Figure-Four Stretch", "dose": "30 sec each side", "pos": "On your back on floor/mat", "how": "Cross ankle over opposite thigh and draw supporting leg toward chest."},
+      {"id": "flexor", "name": "Hip Flexor Stretch", "dose": "30 sec each side", "pos": "Half-kneeling on mat", "how": "Tuck pelvis slightly and shift hips forward, feeling gentle stretch at front of hip."}
+    ]}
+  ]},
   fri:{label:"Friday", focus:"Flexibility & recovery", blocks:[
     {kind:"warm", title:"Warm-up", note:"Get warm before stretching · 2 minutes", items:[
       {id:"fmarch", name:"March in Place", dose:"60 sec", pos:"Standing", secs:60},
@@ -161,7 +197,26 @@ const PLAN = {
        how:"Sit with legs straight and reach toward your toes without bouncing. Measure how far your fingertips go past your toes, or enter a minus number if they stop short."}
     ]}
   ]},
-  sat:{label:"Saturday", focus:"Upper Body & Core", blocks:null},
+  sat:{label:"Saturday", focus:"Upper Body & Core", blocks:[
+    {kind:"warm", title:"Warm-up", note:"Dynamic movements · 4–5 minutes", items:[
+      {"id": "circles", "name": "Arm Circles", "dose": "30 sec each way", "pos": "Standing", "how": "Extend arms sideways and circle forward then backward."},
+      {"id": "rolls", "name": "Shoulder Rolls", "dose": "10 reps", "pos": "Standing", "how": "Roll shoulders up, back and down."},
+      {"id": "rotations", "name": "Standing Torso Rotations", "dose": "10 each side", "pos": "Standing", "how": "With knees soft, gently rotate torso left and right."},
+      {"id": "march", "name": "March in Place", "dose": "60 sec", "pos": "Standing", "how": "March comfortably while swinging arms."}
+    ]},
+    {kind:"strength", title:"Strength training", note:"Rest 60–90 seconds between sets. Move with control.", items:[
+      {"id": "pushup", "name": "Incline Push-Up", "dose": "2 × 8–12", "wt": "Bodyweight", "pos": "Hands on sturdy counter or bench; feet on floor", "how": "Place hands on elevated stable surface, step feet back, keep body straight, lower chest toward surface and press away."},
+      {"id": "row", "name": "One-Arm Dumbbell Row", "dose": "2 × 10 each arm", "wt": "5–10 lb", "pos": "Standing, one hand on sturdy bench", "how": "Support one hand on bench, hinge at hips with both feet on floor, pull dumbbell toward hip and lower slowly.", "log": true},
+      {"id": "lateral", "name": "Dumbbell Lateral Raise", "dose": "2 × 10–12", "wt": "2–5 lb each hand", "pos": "Standing", "how": "Hold light dumbbells at sides, raise arms outward to shoulder height with soft elbows, lower slowly.", "log": true},
+      {"id": "hammer", "name": "Hammer Curl", "dose": "2 × 10–12", "wt": "3–5 lb each hand", "pos": "Standing", "how": "Hold dumbbells palms inward, curl without swinging, lower slowly.", "log": true},
+      {"id": "bird", "name": "Bird Dog", "dose": "2 × 8 each side", "wt": "Bodyweight", "pos": "Hands and knees on floor/mat", "how": "Extend opposite arm and leg while keeping hips level; return and switch."}
+    ]},
+    {kind:"cool", title:"Cool-down stretches", note:"Gentle holds · 3–5 minutes", items:[
+      {"id": "chest", "name": "Doorway Chest Stretch", "dose": "30 sec", "pos": "Standing at doorway", "how": "Place forearm against doorway and step forward gently until chest stretches."},
+      {"id": "cross", "name": "Cross-Body Shoulder Stretch", "dose": "30 sec each arm", "pos": "Standing", "how": "Bring arm across chest and support gently with other hand."},
+      {"id": "child", "name": "Child’s Pose", "dose": "45 sec", "pos": "Kneeling on floor/mat", "how": "Sit hips toward heels, reach arms forward, and breathe slowly."}
+    ]}
+  ]},
   sun:{label:"Sunday", focus:"Treadmill walk/jog", blocks:[
     {kind:"cardio", title:"Light cardio", note:"Easy pace · you should be able to talk", items:[
       {id:"walkjog", name:"Treadmill walk or light jog", dose:"15 min", wt:"Walk 2.5–3.5 mph · jog 4–5 mph · incline 0–2%", pos:"Treadmill", 
